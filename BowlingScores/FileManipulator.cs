@@ -6,11 +6,7 @@ using System.Threading.Tasks;
 
 namespace BowlingScores
 {
-    class Program
+    class FileManipulator
     {
-        static void Main(string[] args)
-        {
-            UserInterface.RunProgram();
-        }
     }
 }
