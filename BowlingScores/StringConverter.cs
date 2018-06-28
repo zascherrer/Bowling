@@ -42,80 +42,101 @@ namespace BowlingScores
 
                 if (charIsNumber)
                 {
-                    if (scoreRaw[i + 2] != ' ')
-                    {
-                        doubleScoreNextRound = false;
-                        doubleScoreTwoRoundsAway = false;
-                    }
-
-                    if (doubleScoreNextRound)
-                    {
-                        score += thisRoundScore * 2;
-
-                        doubleScoreNextRound = false;
-                    }
-                    else if(!doubleScoreNextRound && doubleScoreTwoRoundsAway)
-                    {
-                        score += thisRoundScore * 2;
-
-                        doubleScoreTwoRoundsAway = false;
-                    }
-                    else
-                    {
-                        score += thisRoundScore;
-                    }
+                    score += AddNumberToScore(scoreRaw, i, thisRoundScore);
                 }
                 else
                 {
                     if(scoreRaw[i] == '/')
                     {
-                        if(scoreRaw[i+1] != ' ')
-                        {
-                            doubleScoreNextRound = false;
-                            doubleScoreTwoRoundsAway = false;
-                        }
-                        
-                        if (!doubleScoreNextRound && doubleScoreTwoRoundsAway)
-                        {
-                            score += (10 - int.Parse(scoreRaw[i - 1].ToString())) * 2;
-
-                            doubleScoreTwoRoundsAway = false;
-                        }
-                        else
-                        {
-                            score += 10 - int.Parse(scoreRaw[i - 1].ToString());
-                        }
-
-                        doubleScoreNextRound = true;
+                        score += AddSpareToScore(scoreRaw, i);
                     }
                     else if(scoreRaw[i] == 'X')
                     {
-                        if(scoreRaw[i+1] != ' ')
-                        {
-                            doubleScoreNextRound = false;
-                            doubleScoreTwoRoundsAway = false;
-                        }
-
-                        if (doubleScoreNextRound)
-                        {
-                            score += 10;
-
-                            doubleScoreNextRound = false;
-                        }
-                        if (!doubleScoreNextRound && doubleScoreTwoRoundsAway)
-                        {
-                            score += 10;
-
-                            doubleScoreTwoRoundsAway = false;
-                        }
-                        score += 10;
-
-                        doubleScoreNextRound = true;
-                        doubleScoreTwoRoundsAway = true;
+                        score += AddStrikeToScore(scoreRaw, i);
                     }
                 }
                 
             }
+
+            return score;
+        }
+
+        private static int AddNumberToScore(string scoreRaw, int i, int thisRoundScore)
+        {
+            if (scoreRaw[i + 2] != ' ')
+            {
+                doubleScoreNextRound = false;
+                doubleScoreTwoRoundsAway = false;
+            }
+
+            if (doubleScoreNextRound)
+            {
+                doubleScoreNextRound = false;
+
+                return thisRoundScore * 2;
+            }
+            else if (!doubleScoreNextRound && doubleScoreTwoRoundsAway)
+            {
+                doubleScoreTwoRoundsAway = false;
+
+                return thisRoundScore * 2;
+            }
+            else
+            {
+                return thisRoundScore;
+            }
+        }
+
+        private static int AddSpareToScore(string scoreRaw, int i)
+        {
+            if (scoreRaw[i + 1] != ' ')
+            {
+                doubleScoreNextRound = false;
+                doubleScoreTwoRoundsAway = false;
+            }
+
+            if (!doubleScoreNextRound && doubleScoreTwoRoundsAway)
+            {
+                doubleScoreTwoRoundsAway = false;
+                doubleScoreNextRound = true;
+
+                return (10 - int.Parse(scoreRaw[i - 1].ToString())) * 2;
+            }
+            else
+            {
+                doubleScoreNextRound = true;
+
+                return 10 - int.Parse(scoreRaw[i - 1].ToString());
+            }
+
+        }
+
+        private static int AddStrikeToScore(string scoreRaw, int i)
+        {
+            int score = 0;
+
+            if (scoreRaw[i + 1] != ' ')
+            {
+                doubleScoreNextRound = false;
+                doubleScoreTwoRoundsAway = false;
+            }
+
+            if (doubleScoreNextRound)
+            {
+                score += 10;
+
+                doubleScoreNextRound = false;
+            }
+            if (!doubleScoreNextRound && doubleScoreTwoRoundsAway)
+            {
+                score += 10;
+
+                doubleScoreTwoRoundsAway = false;
+            }
+            score += 10;
+
+            doubleScoreNextRound = true;
+            doubleScoreTwoRoundsAway = true;
 
             return score;
         }
