@@ -23,6 +23,8 @@ namespace BowlingScores
                 Console.WriteLine(scores[i]);
             }
 
+            FileWriter.WriteScoresToFile(scores);
+
             Console.ReadLine();
         }
     }
